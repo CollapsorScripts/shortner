@@ -23,7 +23,7 @@ create table if not exists fingerprint (
 	ip text not null,
 	created_at timestampz not null default now(),
 
-	constraint unique_ip unique (ip),
+	constraint unique_ip unique (statistics_id,ip),
 	constraint fk_fingerprint_statistics foreign key (statistics_id) references statistics (id) on delete cascade
 );
 
@@ -33,7 +33,7 @@ create table if not exists user_agents (
 	agent text not null,
 	last_accessed timestampz default now(),
 
-	constraint unique_agent unique (agent),
+	constraint unique_agent unique (fingerprint_id, agent),
 	constraint fk_user_agents_fingerprint foreign key (fingerprint_id) references fingerprint (id) on delete cascade
 );
 
