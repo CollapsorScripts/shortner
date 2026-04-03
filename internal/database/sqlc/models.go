@@ -4,30 +4,34 @@
 
 package db
 
+import (
+	"github.com/jackc/pgx/v5/pgtype"
+)
+
 type Fingerprint struct {
-	ID           int64       `json:"id"`
-	StatisticsID int64       `json:"statistics_id"`
-	Ip           string      `json:"ip"`
-	CreatedAt    interface{} `json:"created_at"`
+	ID           int64              `json:"id"`
+	StatisticsID int64              `json:"statistics_id"`
+	Ip           string             `json:"ip"`
+	CreatedAt    pgtype.Timestamptz `json:"created_at"`
 }
 
 type Statistic struct {
-	ID           int64       `json:"id"`
-	UrlID        int64       `json:"url_id"`
-	Clicks       int64       `json:"clicks"`
-	LastAccessed interface{} `json:"last_accessed"`
+	ID           int64              `json:"id"`
+	UrlID        int64              `json:"url_id"`
+	Clicks       int64              `json:"clicks"`
+	LastAccessed pgtype.Timestamptz `json:"last_accessed"`
 }
 
 type Url struct {
-	ID          int64       `json:"id"`
-	OriginalUrl string      `json:"original_url"`
-	ShortUrl    string      `json:"short_url"`
-	CreatedAt   interface{} `json:"created_at"`
+	ID          int64              `json:"id"`
+	OriginalUrl string             `json:"original_url"`
+	ShortUrl    string             `json:"short_url"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
 }
 
 type UserAgent struct {
-	ID            int64       `json:"id"`
-	FingerprintID int64       `json:"fingerprint_id"`
-	Agent         string      `json:"agent"`
-	LastAccessed  interface{} `json:"last_accessed"`
+	ID            int64              `json:"id"`
+	FingerprintID int64              `json:"fingerprint_id"`
+	Agent         string             `json:"agent"`
+	LastAccessed  pgtype.Timestamptz `json:"last_accessed"`
 }

@@ -168,12 +168,12 @@ func (q *Queries) UpdateLastAccessedById(ctx context.Context, id int64) (*Statis
 	return &i, err
 }
 
-const updateStatisticsByUrlId = `-- name: UpdateStatisticsByUrlId :one
+const updateLastAccessedByUrlId = `-- name: UpdateLastAccessedByUrlId :one
 update statistics set last_accessed = now() where url_id = $1 returning id, url_id, clicks, last_accessed
 `
 
-func (q *Queries) UpdateStatisticsByUrlId(ctx context.Context, urlID int64) (*Statistic, error) {
-	row := q.db.QueryRow(ctx, updateStatisticsByUrlId, urlID)
+func (q *Queries) UpdateLastAccessedByUrlId(ctx context.Context, urlID int64) (*Statistic, error) {
+	row := q.db.QueryRow(ctx, updateLastAccessedByUrlId, urlID)
 	var i Statistic
 	err := row.Scan(
 		&i.ID,

@@ -36,7 +36,7 @@ type Querier interface {
 	ListStatistics(ctx context.Context, arg ListStatisticsParams) ([]*Statistic, error)
 	ListUrls(ctx context.Context, arg ListUrlsParams) ([]*Url, error)
 	UpdateLastAccessedById(ctx context.Context, id int64) (*Statistic, error)
-	UpdateStatisticsByUrlId(ctx context.Context, urlID int64) (*Statistic, error)
+	UpdateLastAccessedByUrlId(ctx context.Context, urlID int64) (*Statistic, error)
 	UpdateUserAgentLastAccessedById(ctx context.Context, id int64) (*UserAgent, error)
 }
 

@@ -10,7 +10,7 @@ import (
 )
 
 const createUrl = `-- name: CreateUrl :one
-insert into urls (original_url, short_url) values ($1, $2) returning id, original_url, short_url, created_at
+insert into urls (original_url, short_url) values ($1, $2) ON CONFLICT (short_url) DO NOTHING returning id, original_url, short_url, created_at
 `
 
 type CreateUrlParams struct {

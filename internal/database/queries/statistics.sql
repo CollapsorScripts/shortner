@@ -4,7 +4,7 @@ insert into statistics (url_id) values ($1) returning *;
 -- name: UpdateLastAccessedById :one
 update statistics set last_accessed = now() where id = $1 returning *;
 
--- name: UpdateStatisticsByUrlId :one
+-- name: UpdateLastAccessedByUrlId :one
 update statistics set last_accessed = now() where url_id = $1 returning *;
 
 -- name: IncrementClicksCountByUrlId :one

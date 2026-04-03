@@ -1,5 +1,5 @@
 -- name: CreateUrl :one
-insert into urls (original_url, short_url) values ($1, $2) returning *;
+insert into urls (original_url, short_url) values ($1, $2) ON CONFLICT (short_url) DO NOTHING returning *;
 
 -- name: GetOriginalUrlByShortUrl :one
 select original_url from urls where short_url = $1;

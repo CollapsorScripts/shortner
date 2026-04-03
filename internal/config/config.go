@@ -35,9 +35,10 @@ type Paths struct {
 }
 
 type Config struct {
-	Env      string    `yaml:"env" env-default:"local"`
-	Paths    *Paths    `yaml:"paths"`
-	Database *Database `yaml:"database"`
+	Env            string    `yaml:"env" env-default:"local"`
+	ShortUrlLength int       `yaml:"short_url_length" env-default:"6"`
+	Paths          *Paths    `yaml:"paths"`
+	Database       *Database `yaml:"database"`
 }
 
 // MustLoad - загружает конфигурацию
