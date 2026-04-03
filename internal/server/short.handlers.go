@@ -2,6 +2,7 @@ package server
 
 import (
 	"errors"
+	"fmt"
 	"shortner/internal/database/service"
 	db "shortner/internal/database/sqlc"
 	"shortner/pkg/logger"
@@ -29,7 +30,7 @@ func (r *Router) Shorten(c fiber.Ctx) error {
 	createdURL, err := r.services.URLS.CreateUrl(c.RequestCtx(), r.cfg, req.URL)
 	if err != nil {
 		logger.Error("Ошибка при сокращении url: %v", err)
-		return SetHTTPError(c, "Ошибка при сокращении URL", fiber.StatusInternalServerError)
+		return SetHTTPError(c, fmt.Sprintf("Ошибка при сокращении URL: %v", err), fiber.StatusInternalServerError)
 	}
 
 	return c.JSON(shortenResponse{
@@ -41,6 +42,12 @@ func (r *Router) statisticsCollection(c fiber.Ctx, urlModel *db.Url) {
 	stats, err := r.services.Statistics.IncrementClicksCountByUrlId(c.RequestCtx(), urlModel.ID)
 	if err != nil {
 		logger.Error("Ошибка при увеличении счетчика кликов: %v", err)
+		return
+	}
+
+	_, err = r.services.Statistics.UpdateLastAccessedById(c.RequestCtx(), urlModel.ID)
+	if err != nil {
+		logger.Error("Ошибка при попытке обновить время последнего посещения: %v", err)
 		return
 	}
 
@@ -113,5 +120,5 @@ func (r *Router) GetOriginalURL(c fiber.Ctx) error {
 		r.statisticsCollection(c, urlModel)
 	}
 
-	return c.Redirect().To(urlModel.OriginalUrl)
+	return c.Redirect().Status(fiber.StatusMovedPermanently).To(urlModel.OriginalUrl)
 }

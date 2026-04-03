@@ -51,6 +51,16 @@ func main() {
 		//Инициализируем сервер
 		srv := server.NewRouter(cfg, services)
 
+		// Запуск сервера в отдельном потоке
+		go func() {
+			port := fmt.Sprintf(":%d", cfg.Server.Port)
+
+			logger.Info("Сервер запущен на адресе: %s", port)
+			if err := srv.Listen(port); err != nil {
+				logger.Warn("Ошибка запуска сервера: %v", err)
+			}
+		}()
+
 		<-rootCtx.Done()
 		logger.Warn("Получен SIGINT, выключаемся...")
 

@@ -1,0 +1,11 @@
+env: prod
+short_url_length: 6 #длина сокращенных ссылок
+paths: #настройки фиксированных путей
+  logDir: ./log #папка с логами
+  logName: shortner.log #файл с логом
+  migrations: #настройка миграций
+    dir: "migrations" #папка с миграциями
+    recreate: false #обновлять стуктуру бд новыми миграциями
+    drop: false #удалять таблицы при пересоздании
+server: #настройки сервера
+  timeout: 30s #тайм аут сервера

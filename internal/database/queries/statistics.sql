@@ -8,10 +8,10 @@ update statistics set last_accessed = now() where id = $1 returning *;
 update statistics set last_accessed = now() where url_id = $1 returning *;
 
 -- name: IncrementClicksCountByUrlId :one
-update statistics set access_count = access_count + 1 where url_id = $1 returning *;
+update statistics set clicks = clicks + 1 where url_id = $1 returning *;
 
 -- name: IncrementClicksCountById :one
-update statistics set access_count = access_count + 1 where id = $1 returning *;
+update statistics set clicks = clicks + 1 where id = $1 returning *;
 
 -- name: GetStatistics :many
 select * from statistics order by id;

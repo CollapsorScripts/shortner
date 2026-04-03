@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/ilyakaznacheev/cleanenv"
 )
@@ -34,11 +35,17 @@ type Paths struct {
 	Migrations *Migrations `yaml:"migrations"`
 }
 
+type Server struct {
+	Port    int           `yaml:"port"`
+	Timeout time.Duration `yaml:"timeout"`
+}
+
 type Config struct {
 	Env            string    `yaml:"env" env-default:"local"`
 	ShortUrlLength int       `yaml:"short_url_length" env-default:"6"`
 	Paths          *Paths    `yaml:"paths"`
 	Database       *Database `yaml:"database"`
+	Server         *Server   `yaml:"server"`
 }
 
 // MustLoad - загружает конфигурацию
@@ -76,6 +83,7 @@ func mustFecthDbEnv(cfg *Config) *Config {
 			"DB_USER":     "",
 			"DB_PASSWORD": "",
 			"DB_NAME":     "",
+			"SERVER_PORT": "",
 		}
 
 		for key := range envArgs {
@@ -91,6 +99,11 @@ func mustFecthDbEnv(cfg *Config) *Config {
 			panic(fmt.Sprintf("Неверный формат DB_PORT: %v", err))
 		}
 
+		serverPort, err := strconv.Atoi(envArgs["SERVER_PORT"])
+		if err != nil {
+			panic(fmt.Sprintf("Неверный формат SERVER_PORT: %v", err))
+		}
+
 		cfg.Database = &Database{
 			Host:     envArgs["DB_HOST"],
 			Port:     port,
@@ -98,6 +111,8 @@ func mustFecthDbEnv(cfg *Config) *Config {
 			Password: envArgs["DB_PASSWORD"],
 			Name:     envArgs["DB_NAME"],
 		}
+
+		cfg.Server.Port = serverPort
 	}
 
 	return cfg

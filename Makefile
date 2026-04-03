@@ -19,7 +19,7 @@ CGO=0
 
 # Docker
 CMD_UP_DOCKER := "docker compose up -d"
-CMD_RM_DOCKER := "docker compose stop && docker compose rm -f"
+CMD_RM_DOCKER := "docker compose stop && docker compose rm -f && docker image rm shortner-shortner postgres"
 #
 
 all: build run_local
@@ -41,6 +41,12 @@ gen_sqlc:
 	@echo "Генерация sqlc..."
 	@sqlc generate
 	@echo "Генерация sqlc завершена!"
+
+docker_up:
+	@$(CMD_UP_DOCKER)
+
+docker_rm:
+	@$(CMD_RM_DOCKER)
 
 update:
 	@echo "Обновление пакетов..."

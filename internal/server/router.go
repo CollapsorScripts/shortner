@@ -80,12 +80,14 @@ func (route *Router) loadEndpoints() *fiber.App {
 	route.r.Use(srvLog.New())
 
 	endpoint := route.r.Group(fmt.Sprintf("%s/", apiStr))
-	endpoint.Use(middleware)
+
+	shortEndpoint := route.r.Group("/")
+	shortEndpoint.Use(middleware)
 
 	// Сокращение URL
 	endpoint.Post(getHandler("/shorten"))
 	// Доступ по сокращенному URL
-	endpoint.Get(getHandler("/:short_url"))
+	shortEndpoint.Get(getHandler("/:short_url"))
 	// Статистика
 	endpoint.Get(getHandler("/stats/:short_url"))
 

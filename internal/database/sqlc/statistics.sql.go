@@ -91,7 +91,7 @@ func (q *Queries) GetStatisticsByUrlId(ctx context.Context, urlID int64) (*Stati
 }
 
 const incrementClicksCountById = `-- name: IncrementClicksCountById :one
-update statistics set access_count = access_count + 1 where id = $1 returning id, url_id, clicks, last_accessed, created_at
+update statistics set clicks = clicks + 1 where id = $1 returning id, url_id, clicks, last_accessed, created_at
 `
 
 func (q *Queries) IncrementClicksCountById(ctx context.Context, id int64) (*Statistic, error) {
@@ -108,7 +108,7 @@ func (q *Queries) IncrementClicksCountById(ctx context.Context, id int64) (*Stat
 }
 
 const incrementClicksCountByUrlId = `-- name: IncrementClicksCountByUrlId :one
-update statistics set access_count = access_count + 1 where url_id = $1 returning id, url_id, clicks, last_accessed, created_at
+update statistics set clicks = clicks + 1 where url_id = $1 returning id, url_id, clicks, last_accessed, created_at
 `
 
 func (q *Queries) IncrementClicksCountByUrlId(ctx context.Context, urlID int64) (*Statistic, error) {

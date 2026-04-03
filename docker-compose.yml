@@ -1,0 +1,41 @@
+services:
+  shortner:
+    build: .
+    container_name: service
+    restart: always
+    environment:
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      DB_PORT: ${DB_PORT}
+      DB_HOST: ${DB_HOST}
+      SERVER_PORT: ${SERVER_PORT}
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    depends_on:
+      - postgres
+    command: ["/app/shortner", "--config=prod.yaml"]
+    networks:
+      - shortner-network
+
+  postgres:
+    image: postgres:16
+    container_name: db
+    restart: always
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - shortner-network
+
+networks:
+  shortner-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
