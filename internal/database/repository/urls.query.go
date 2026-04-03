@@ -4,7 +4,6 @@ import (
 	"context"
 	"shortner/internal/config"
 	db "shortner/internal/database/sqlc"
-	"shortner/pkg/shortener"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -25,7 +24,7 @@ func NewUrlsRepository(conn *pgxpool.Pool, cfg *config.Config) UrlsRepository {
 }
 
 // CreateUrl - создает новый URL в базе данных
-func (r *urlsRepo) CreateUrl(ctx context.Context, url string) (*db.Url, error) {
+func (r *urlsRepo) CreateUrl(ctx context.Context, url, short_url string) (*db.Url, error) {
 	tx, err := r.db.Begin(ctx)
 	if err != nil {
 		return nil, err
@@ -33,18 +32,12 @@ func (r *urlsRepo) CreateUrl(ctx context.Context, url string) (*db.Url, error) {
 	defer tx.Rollback(ctx)
 
 	createdUrl := new(db.Url)
-	shortUrl := ""
 
 	qtx := r.queries.WithTx(tx)
 	for {
-		shortUrl, err = shortener.GenerateShortUrl(r.cfg, url)
-		if err != nil {
-			return nil, err
-		}
-
 		createdUrl, err = qtx.CreateUrl(ctx, db.CreateUrlParams{
 			OriginalUrl: url,
-			ShortUrl:    shortUrl,
+			ShortUrl:    short_url,
 		})
 
 		if err == nil && createdUrl.ID != 0 {
