@@ -23,4 +23,4 @@ select * from statistics where id = $1 order by id;
 select * from statistics where url_id = $1 order by id;
 
 -- name: ListStatistics :many
-select * from statistics limit $1 offset $2 order by id;
+select * from statistics order by id limit $1 offset $2;
