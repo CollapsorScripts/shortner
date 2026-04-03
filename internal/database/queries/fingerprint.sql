@@ -5,10 +5,10 @@ insert into fingerprints (statistics_id, ip) values ($1, $2) returning *;
 select * from fingerprints order by id;
 
 -- name: ListFingerPrint :many
-select * from fingerprints limit $1 offset $2 order by id;
+select * from fingerprints order by id limit $1 offset $2;
 
 -- name: ListFingerPrintByStatisticsId :many
-select * from fingerprints where statistics_id = $1 limit $2 offset $3 order by id;
+select * from fingerprints where statistics_id = $1 order by id limit $2 offset $3;
 
 -- name: GetFingerPrintByIp :one
 select * from fingerprints where ip = $1 order by id;

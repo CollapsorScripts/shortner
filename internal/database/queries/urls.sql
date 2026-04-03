@@ -11,7 +11,7 @@ select original_url from urls where id = $1;
 select * from urls order by id;
 
 -- name: ListUrls :many
-select * from urls limit $1 offset $2 order by id;
+select * from urls order by id limit $1 offset $2;
 
 -- name: DeleteUrlById :exec
 delete from urls where id = $1;
