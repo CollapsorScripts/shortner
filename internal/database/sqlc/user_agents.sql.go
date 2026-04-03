@@ -30,6 +30,27 @@ func (q *Queries) CreateUserAgent(ctx context.Context, arg CreateUserAgentParams
 	return &i, err
 }
 
+const getUserAgentByFpIdAgent = `-- name: GetUserAgentByFpIdAgent :one
+select id, fingerprint_id, agent, last_accessed from user_agents where fingerprint_id = $1 and agent = $2
+`
+
+type GetUserAgentByFpIdAgentParams struct {
+	FingerprintID int64  `json:"fingerprint_id"`
+	Agent         string `json:"agent"`
+}
+
+func (q *Queries) GetUserAgentByFpIdAgent(ctx context.Context, arg GetUserAgentByFpIdAgentParams) (*UserAgent, error) {
+	row := q.db.QueryRow(ctx, getUserAgentByFpIdAgent, arg.FingerprintID, arg.Agent)
+	var i UserAgent
+	err := row.Scan(
+		&i.ID,
+		&i.FingerprintID,
+		&i.Agent,
+		&i.LastAccessed,
+	)
+	return &i, err
+}
+
 const getUserAgentById = `-- name: GetUserAgentById :one
 select id, fingerprint_id, agent, last_accessed from user_agents where id = $1
 `

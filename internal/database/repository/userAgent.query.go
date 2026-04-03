@@ -50,3 +50,11 @@ func (r *userAgentRepo) GetUserAgentsByFingerprintId(ctx context.Context, finger
 func (r *userAgentRepo) UpdateUserAgentLastAccessedById(ctx context.Context, id int64) (*db.UserAgent, error) {
 	return r.queries.UpdateUserAgentLastAccessedById(ctx, id)
 }
+
+// GetUserAgentByFpIdAgent - возвращает user_agent по ID fingerprint и user_agent
+func (r *userAgentRepo) GetUserAgentByFpIdAgent(ctx context.Context, fingerprintID int64, userAgent string) (*db.UserAgent, error) {
+	return r.queries.GetUserAgentByFpIdAgent(ctx, db.GetUserAgentByFpIdAgentParams{
+		FingerprintID: fingerprintID,
+		Agent:         userAgent,
+	})
+}

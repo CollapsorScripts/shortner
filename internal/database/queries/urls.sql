@@ -7,6 +7,9 @@ select original_url from urls where short_url = $1;
 -- name: GetOriginalUrlById :one
 select original_url from urls where id = $1;
 
+-- name: GetUrlByShortUrl :one
+select * from urls where short_url = $1;
+
 -- name: GetUrls :many
 select * from urls order by id;
 

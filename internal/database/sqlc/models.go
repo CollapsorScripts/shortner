@@ -20,6 +20,7 @@ type Statistic struct {
 	UrlID        int64              `json:"url_id"`
 	Clicks       int64              `json:"clicks"`
 	LastAccessed pgtype.Timestamptz `json:"last_accessed"`
+	CreatedAt    pgtype.Timestamptz `json:"created_at"`
 }
 
 type Url struct {

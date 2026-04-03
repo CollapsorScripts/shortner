@@ -54,3 +54,35 @@ func (r *fingerPrintRepo) ListFingerPrintByStatisticsId(ctx context.Context, sta
 func (r *fingerPrintRepo) GetFingerPrintByIp(ctx context.Context, ip string) (*db.Fingerprint, error) {
 	return r.queries.GetFingerPrintByIp(ctx, ip)
 }
+
+func (r *fingerPrintRepo) CreateFullFingerPrint(ctx context.Context, statistics_id int64, ip, agent string) (*db.Fingerprint, *db.UserAgent, error) {
+	tx, err := r.db.Begin(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+	defer tx.Rollback(ctx)
+
+	qtx := r.queries.WithTx(tx)
+
+	fp, err := qtx.CreateFingerPrint(ctx, db.CreateFingerPrintParams{
+		StatisticsID: statistics_id,
+		Ip:           ip,
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+
+	ua, err := qtx.CreateUserAgent(ctx, db.CreateUserAgentParams{
+		FingerprintID: fp.ID,
+		Agent:         agent,
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		return nil, nil, err
+	}
+
+	return fp, ua, nil
+}

@@ -34,3 +34,17 @@ func (s *FingerPrintService) ListFingerPrintByStatisticsId(ctx context.Context, 
 func (s *FingerPrintService) GetFingerPrintByIp(ctx context.Context, ip string) (*db.Fingerprint, error) {
 	return s.repo.GetFingerPrintByIp(ctx, ip)
 }
+
+type CreateFullFingerPrintTx struct {
+	Fingerprint *db.Fingerprint
+	UserAgent   *db.UserAgent
+}
+
+// CreateFullFingerPrint - создает новый fingerprint и user agent
+func (s *FingerPrintService) CreateFullFingerPrint(ctx context.Context, statistics_id int64, ip, agent string) (*CreateFullFingerPrintTx, error) {
+	fp, ua, err := s.repo.CreateFullFingerPrint(ctx, statistics_id, ip, agent)
+	if err != nil {
+		return nil, err
+	}
+	return &CreateFullFingerPrintTx{Fingerprint: fp, UserAgent: ua}, nil
+}

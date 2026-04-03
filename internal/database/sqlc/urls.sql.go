@@ -70,6 +70,22 @@ func (q *Queries) GetOriginalUrlByShortUrl(ctx context.Context, shortUrl string)
 	return original_url, err
 }
 
+const getUrlByShortUrl = `-- name: GetUrlByShortUrl :one
+select id, original_url, short_url, created_at from urls where short_url = $1
+`
+
+func (q *Queries) GetUrlByShortUrl(ctx context.Context, shortUrl string) (*Url, error) {
+	row := q.db.QueryRow(ctx, getUrlByShortUrl, shortUrl)
+	var i Url
+	err := row.Scan(
+		&i.ID,
+		&i.OriginalUrl,
+		&i.ShortUrl,
+		&i.CreatedAt,
+	)
+	return &i, err
+}
+
 const getUrls = `-- name: GetUrls :many
 select id, original_url, short_url, created_at from urls order by id
 `

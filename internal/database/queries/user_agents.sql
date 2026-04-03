@@ -7,6 +7,9 @@ select * from user_agents order by id;
 -- name: GetUserAgentById :one
 select * from user_agents where id = $1;
 
+-- name: GetUserAgentByFpIdAgent :one
+select * from user_agents where fingerprint_id = $1 and agent = $2;
+
 -- name: GetUserAgentsByFingerprintId :many
 select * from user_agents where fingerprint_id = $1;
 

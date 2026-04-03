@@ -56,3 +56,8 @@ func (s *UrlsService) DeleteUrlById(ctx context.Context, id int64) error {
 func (s *UrlsService) DeleteUrlByShortUrl(ctx context.Context, shortUrl string) error {
 	return s.repo.DeleteUrlByShortUrl(ctx, shortUrl)
 }
+
+// GetUrlByShortUrl - возвращает URL по короткой ссылке
+func (s *UrlsService) GetUrlByShortUrl(ctx context.Context, shortUrl string) (*db.Url, error) {
+	return s.repo.GetUrlByShortUrl(ctx, shortUrl)
+}

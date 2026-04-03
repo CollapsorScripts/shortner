@@ -12,6 +12,7 @@ create table if not exists statistics (
 	url_id bigint not null,
 	clicks bigint not null default 0,
 	last_accessed timestamptz not null default null,
+	created_at timestamptz not null default now(),
 
 	constraint fk_statistics_urls foreign key (url_id) references urls (id) on delete cascade
 );

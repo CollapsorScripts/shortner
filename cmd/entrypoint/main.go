@@ -5,10 +5,13 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"shortner/internal/bootstrap"
 	"shortner/internal/config"
 	db "shortner/internal/database/sqlc"
+	"shortner/internal/server"
 	"shortner/pkg/logger"
 	"shortner/utils"
+	"time"
 )
 
 func main() {
@@ -38,15 +41,27 @@ func main() {
 		panic(fmt.Errorf("не удалось установить соединение с базой данных: %w", err))
 	}
 
-	// TODO: потом убрать
-	_ = dbConnect
+	services := bootstrap.InitServices(cfg, dbConnect)
 
 	//Создаем контекст
 	rootCtx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
 
 	{
+		//Инициализируем сервер
+		srv := server.NewRouter(cfg, services)
+
 		<-rootCtx.Done()
 		logger.Warn("Получен SIGINT, выключаемся...")
+
+		shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+
+		// / Ожидаем завершения сервера
+		if err := srv.ShutdownWithContext(shutdownCtx); err != nil {
+			logger.Error("Ошибка при выключении сервера api: %v", err)
+		}
+
+		dbConnect.Close()
 	}
 }

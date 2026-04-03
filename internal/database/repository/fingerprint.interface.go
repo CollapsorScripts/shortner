@@ -11,4 +11,5 @@ type FingerPrintRepository interface {
 	ListFingerPrint(ctx context.Context, statisticsID int64) ([]*db.Fingerprint, error)
 	ListFingerPrintByStatisticsId(ctx context.Context, statisticsID int64, limit, offset int32) ([]*db.Fingerprint, error)
 	GetFingerPrintByIp(ctx context.Context, ip string) (*db.Fingerprint, error)
+	CreateFullFingerPrint(ctx context.Context, statistics_id int64, ip, agent string) (*db.Fingerprint, *db.UserAgent, error)
 }

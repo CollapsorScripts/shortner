@@ -39,3 +39,8 @@ func (s *UserAgentService) GetUserAgentsByFingerprintId(ctx context.Context, fin
 func (s *UserAgentService) UpdateUserAgentLastAccessedById(ctx context.Context, id int64) (*db.UserAgent, error) {
 	return s.repo.UpdateUserAgentLastAccessedById(ctx, id)
 }
+
+// GetUserAgentByFpIdAgent - возвращает user_agent по ID fingerprint и user_agent
+func (s *UserAgentService) GetUserAgentByFpIdAgent(ctx context.Context, fingerprintID int64, userAgent string) (*db.UserAgent, error) {
+	return s.repo.GetUserAgentByFpIdAgent(ctx, fingerprintID, userAgent)
+}

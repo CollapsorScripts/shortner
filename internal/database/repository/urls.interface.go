@@ -13,4 +13,5 @@ type UrlsRepository interface {
 	ListUrls(ctx context.Context, limit, offset int32) ([]*db.Url, error)
 	DeleteUrlById(ctx context.Context, id int64) error
 	DeleteUrlByShortUrl(ctx context.Context, shortUrl string) error
+	GetUrlByShortUrl(ctx context.Context, shortUrl string) (*db.Url, error)
 }

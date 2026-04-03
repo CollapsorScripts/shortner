@@ -11,4 +11,5 @@ type UserAgentRepository interface {
 	GetUserAgentById(ctx context.Context, id int64) (*db.UserAgent, error)
 	GetUserAgentsByFingerprintId(ctx context.Context, fingerprintID int64) ([]*db.UserAgent, error)
 	UpdateUserAgentLastAccessedById(ctx context.Context, id int64) (*db.UserAgent, error)
+	GetUserAgentByFpIdAgent(ctx context.Context, fingerprintID int64, userAgent string) (*db.UserAgent, error)
 }

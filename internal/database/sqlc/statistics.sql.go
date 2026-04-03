@@ -10,7 +10,7 @@ import (
 )
 
 const createStatistics = `-- name: CreateStatistics :one
-insert into statistics (url_id) values ($1) returning id, url_id, clicks, last_accessed
+insert into statistics (url_id) values ($1) returning id, url_id, clicks, last_accessed, created_at
 `
 
 func (q *Queries) CreateStatistics(ctx context.Context, urlID int64) (*Statistic, error) {
@@ -21,12 +21,13 @@ func (q *Queries) CreateStatistics(ctx context.Context, urlID int64) (*Statistic
 		&i.UrlID,
 		&i.Clicks,
 		&i.LastAccessed,
+		&i.CreatedAt,
 	)
 	return &i, err
 }
 
 const getStatisticById = `-- name: GetStatisticById :one
-select id, url_id, clicks, last_accessed from statistics where id = $1 order by id
+select id, url_id, clicks, last_accessed, created_at from statistics where id = $1 order by id
 `
 
 func (q *Queries) GetStatisticById(ctx context.Context, id int64) (*Statistic, error) {
@@ -37,12 +38,13 @@ func (q *Queries) GetStatisticById(ctx context.Context, id int64) (*Statistic, e
 		&i.UrlID,
 		&i.Clicks,
 		&i.LastAccessed,
+		&i.CreatedAt,
 	)
 	return &i, err
 }
 
 const getStatistics = `-- name: GetStatistics :many
-select id, url_id, clicks, last_accessed from statistics order by id
+select id, url_id, clicks, last_accessed, created_at from statistics order by id
 `
 
 func (q *Queries) GetStatistics(ctx context.Context) ([]*Statistic, error) {
@@ -59,6 +61,7 @@ func (q *Queries) GetStatistics(ctx context.Context) ([]*Statistic, error) {
 			&i.UrlID,
 			&i.Clicks,
 			&i.LastAccessed,
+			&i.CreatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -71,7 +74,7 @@ func (q *Queries) GetStatistics(ctx context.Context) ([]*Statistic, error) {
 }
 
 const getStatisticsByUrlId = `-- name: GetStatisticsByUrlId :one
-select id, url_id, clicks, last_accessed from statistics where url_id = $1 order by id
+select id, url_id, clicks, last_accessed, created_at from statistics where url_id = $1 order by id
 `
 
 func (q *Queries) GetStatisticsByUrlId(ctx context.Context, urlID int64) (*Statistic, error) {
@@ -82,12 +85,13 @@ func (q *Queries) GetStatisticsByUrlId(ctx context.Context, urlID int64) (*Stati
 		&i.UrlID,
 		&i.Clicks,
 		&i.LastAccessed,
+		&i.CreatedAt,
 	)
 	return &i, err
 }
 
 const incrementClicksCountById = `-- name: IncrementClicksCountById :one
-update statistics set access_count = access_count + 1 where id = $1 returning id, url_id, clicks, last_accessed
+update statistics set access_count = access_count + 1 where id = $1 returning id, url_id, clicks, last_accessed, created_at
 `
 
 func (q *Queries) IncrementClicksCountById(ctx context.Context, id int64) (*Statistic, error) {
@@ -98,12 +102,13 @@ func (q *Queries) IncrementClicksCountById(ctx context.Context, id int64) (*Stat
 		&i.UrlID,
 		&i.Clicks,
 		&i.LastAccessed,
+		&i.CreatedAt,
 	)
 	return &i, err
 }
 
 const incrementClicksCountByUrlId = `-- name: IncrementClicksCountByUrlId :one
-update statistics set access_count = access_count + 1 where url_id = $1 returning id, url_id, clicks, last_accessed
+update statistics set access_count = access_count + 1 where url_id = $1 returning id, url_id, clicks, last_accessed, created_at
 `
 
 func (q *Queries) IncrementClicksCountByUrlId(ctx context.Context, urlID int64) (*Statistic, error) {
@@ -114,12 +119,13 @@ func (q *Queries) IncrementClicksCountByUrlId(ctx context.Context, urlID int64) 
 		&i.UrlID,
 		&i.Clicks,
 		&i.LastAccessed,
+		&i.CreatedAt,
 	)
 	return &i, err
 }
 
 const listStatistics = `-- name: ListStatistics :many
-select id, url_id, clicks, last_accessed from statistics order by id limit $1 offset $2
+select id, url_id, clicks, last_accessed, created_at from statistics order by id limit $1 offset $2
 `
 
 type ListStatisticsParams struct {
@@ -141,6 +147,7 @@ func (q *Queries) ListStatistics(ctx context.Context, arg ListStatisticsParams) 
 			&i.UrlID,
 			&i.Clicks,
 			&i.LastAccessed,
+			&i.CreatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -153,7 +160,7 @@ func (q *Queries) ListStatistics(ctx context.Context, arg ListStatisticsParams) 
 }
 
 const updateLastAccessedById = `-- name: UpdateLastAccessedById :one
-update statistics set last_accessed = now() where id = $1 returning id, url_id, clicks, last_accessed
+update statistics set last_accessed = now() where id = $1 returning id, url_id, clicks, last_accessed, created_at
 `
 
 func (q *Queries) UpdateLastAccessedById(ctx context.Context, id int64) (*Statistic, error) {
@@ -164,12 +171,13 @@ func (q *Queries) UpdateLastAccessedById(ctx context.Context, id int64) (*Statis
 		&i.UrlID,
 		&i.Clicks,
 		&i.LastAccessed,
+		&i.CreatedAt,
 	)
 	return &i, err
 }
 
 const updateLastAccessedByUrlId = `-- name: UpdateLastAccessedByUrlId :one
-update statistics set last_accessed = now() where url_id = $1 returning id, url_id, clicks, last_accessed
+update statistics set last_accessed = now() where url_id = $1 returning id, url_id, clicks, last_accessed, created_at
 `
 
 func (q *Queries) UpdateLastAccessedByUrlId(ctx context.Context, urlID int64) (*Statistic, error) {
@@ -180,6 +188,7 @@ func (q *Queries) UpdateLastAccessedByUrlId(ctx context.Context, urlID int64) (*
 		&i.UrlID,
 		&i.Clicks,
 		&i.LastAccessed,
+		&i.CreatedAt,
 	)
 	return &i, err
 }
