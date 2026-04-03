@@ -6,3 +6,4 @@ select original_url from urls where short_url = $1;
 
 -- name: GetOriginalUrlById :one
 select original_url from urls where id = $1;
+
