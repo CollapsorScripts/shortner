@@ -2,7 +2,7 @@ create table if not exists urls (
 	id bigserial primary key,
 	original_url text not null,
 	short_url text not null,
-	created_at timestampz not null default now(),
+	created_at timestamptz not null default now(),
 
 	constraint unique_short_url unique (short_url)
 );
@@ -11,7 +11,7 @@ create table if not exists statistics (
 	id bigserial primary key,
 	url_id bigint not null,
 	clicks bigint not null default 0,
-	last_accessed timestampz default null,
+	last_accessed timestamptz not null default null,
 
 	constraint fk_statistics_urls foreign key (url_id) references urls (id) on delete cascade
 );
@@ -21,7 +21,7 @@ create table if not exists fingerprint (
 	id bigserial primary key,
 	statistics_id bigint not null,
 	ip text not null,
-	created_at timestampz not null default now(),
+	created_at timestamptz not null default now(),
 
 	constraint unique_ip unique (statistics_id,ip),
 	constraint fk_fingerprint_statistics foreign key (statistics_id) references statistics (id) on delete cascade
@@ -31,7 +31,7 @@ create table if not exists user_agents (
 	id bigserial primary key,
 	fingerprint_id bigint not null,
 	agent text not null,
-	last_accessed timestampz default now(),
+	last_accessed timestamptz not null default now(),
 
 	constraint unique_agent unique (fingerprint_id, agent),
 	constraint fk_user_agents_fingerprint foreign key (fingerprint_id) references fingerprint (id) on delete cascade
